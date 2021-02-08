@@ -1,46 +1,21 @@
 <?php
 
-// $servername = "mysql:host=localhost;dbname=signup_login";
-
-try {
-    $pdo = new PDO("mysql:host=localhost;dbname=signup_login", "root", "");
-
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    echo "Connected";
 
 
+if (isset($_POST['btn'], $_POST['name'])) {
+
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $confirmpassword = $_POST['confirmpassword'];
+    $gender = $_POST['gender'];
+    $dob = $_POST['dob'];
 
 
+    $nameErr = $emailErr = $genderErr = $websiteErr = "";
+    $name = $email = $gender = $dob = $password = $confirmpassword = "";
 
-    if (isset($_POST['btn'])) {
-        if ($_POST['password'] == $_POST['confirmpassword']) {
-            // Variable for from data
-            $name = $_POST['name'];
-            $email = $_POST['email'];
-            $password = $_POST['password'];
-            $confirmpassword = $_POST['confirmpassword'];
-            $gender = $_POST['gender'];
-            $dob = $_POST['dob'];
-            $phone = $_POST['phone'];
-
-
-
-
-            $q = $pdo->prepare("INSERT INTO users (name,email,password,gender,dob,phone) VALUES (:name, :email, :password, :gender, :dob,:phone)");
-            $q->bindParam("name", $name, PDO::PARAM_STR);
-            $q->bindParam("email", $email, PDO::PARAM_STR);
-            $q->bindParam("password", $password, PDO::PARAM_STR);
-            $q->bindParam("gender", $gender, PDO::PARAM_STR);
-            $q->bindParam("dob", $dob, PDO::PARAM_STR);
-            $q->bindParam("phone", $phone, PDO::PARAM_STR);
-            $q->execute();
-        } else {
-            echo "<script> alert('Password Not Match')</script>";
-        }
-    }
-} catch (PDOException $e) {
-    echo $e->getMessage();
+   
 }
 
 
@@ -66,13 +41,18 @@ try {
 <body>
     <!-- form BEgins here -->
     <h1 class="text-center">
-        REGISTER
+        REGISITER
     </h1>
-    <form action="signup.php" method="POST" class="m-auto col-4">
+    <form action="12.php" method="POST" class="m-auto col-4">
         <div class="form-group">
             <label for="">Name</label>
-            <input type="text" class="form-control" name="name" id="" aria-describedby="helpId" placeholder="" required>
-            <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
+            <input type="text" class="form-control" name="name" id="" aria-describedby="helpId" placeholder="">
+            <small id="helpId" class="form-text text-danger"><?php if (isset($_POST['name'])) {
+                                                                   if (empty($name)) {
+                                                                    $nameErr = "Name Required";
+                                                                }
+                                                                   echo $nameErr;
+                                                                }  ?></small>
         </div>
         <!-- <div class="form-group">
             <label for="">Username</label>
@@ -81,33 +61,24 @@ try {
         </div> -->
         <div class="form-group">
             <label for="">Email</label>
-            <input type="email" class="form-control" name="email" id="" aria-describedby="helpId" placeholder="" required>
+            <input type="email" class="form-control" name="email" id="" aria-describedby="helpId" placeholder="">
             <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
-        </div>
-        <div class="from-group mb-2">
-            <div>
-                <label for="">Phone</label>
-            </div>
-            <div class="input-group-prepend">
-                <div class="input-group-text">+</div>
-                <input type="tel" name="phone" pattern="[0-9]{12}" class="form-control" id="" placeholder="" required>
-            </div>
         </div>
         <div class="form-group">
             <label for="">Password</label>
-            <input type="password" class="form-control" name="password" id="" aria-describedby="helpId" placeholder="" required>
+            <input type="password" class="form-control" name="password" id="" aria-describedby="helpId" placeholder="">
             <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
 
         </div>
 
         <div class="form-group">
             <label for="">Confirm Password</label>
-            <input type="password" class="form-control" name="confirmpassword" id="" aria-describedby="helpId" placeholder="" required>
+            <input type="password" class="form-control" name="confirmpassword" id="" aria-describedby="helpId" placeholder="">
             <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
         </div>
         <div class="form-group">
             <label for="">Date of Birth</label>
-            <input type="date" class="form-control" name="dob" id="" aria-describedby="helpId" placeholder="" required>
+            <input type="date" class="form-control" name="dob" id="" aria-describedby="helpId" placeholder="">
             <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
         </div>
         <div class="form-group">
@@ -123,9 +94,6 @@ try {
         </button>
         <p class="text-center py-3">
             Already have an Account! <a href="signin.php">Login</a> Now
-        </p>
-        <p class="text-center py-1">
-            <a href="profile.php"> Search Your Profile </a>
         </p>
     </form>
 

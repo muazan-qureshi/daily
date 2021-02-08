@@ -3,13 +3,13 @@
 // $servername = "mysql:host=localhost;dbname=signup_login";
 
 try {
-    $pdo = new PDO("mysql:host=localhost;dbname=signup12", "root", "");
+    $pdo = new PDO("mysql:host=localhost;dbname=signup_login", "root", "");
 
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     echo "Connected";
 
-
+    
 
     if (isset($_POST['btn'])) {
 
@@ -33,6 +33,7 @@ try {
         $user = $q->fetch(PDO::FETCH_ASSOC);
         if ($user == false) {
             echo "<script> alert('Invalid Creditentials For Login') </script>";
+            // echo $e->getMessage();
         } else {
             // Redirect to other Page
             header("location:hello.php");
@@ -78,6 +79,7 @@ try {
             <input type="password" class="form-control" name="password" id="" aria-describedby="helpId" placeholder="">
             <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
         </div>
+        
 
         <button type="submit" name="btn" class="w-100 btn btn-info">
             Login
