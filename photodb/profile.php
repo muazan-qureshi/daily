@@ -79,11 +79,12 @@ try {
 
                 echo "Name is " . $aa['name'] . "<br>";
                 echo "Email is " . $aa['email'] . "<br>";
-                echo "Photo is " . $aa['photo'] . "<br>";
+                $oo =  $aa['photo'];
             }
         }
 
         ?>
+        <img class="img-fluid" src="uploads/<?php echo $oo ?>">
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
