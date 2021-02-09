@@ -23,19 +23,22 @@ try {
         $q->bindParam("email", $email, PDO::PARAM_STR);
 
         $q->execute();
-        echo 'added!';
+        $emailerror = "User added Successfully";
         // $q->errorInfo();
         // print_r($this->pdo->errorInfo());
         // echo 'Error occurred:' . implode(":", $this->pdo->errorInfo());
     }
 } catch (PDOException $e) {
     // echo $e->getMessage();
-    if ($e->errorInfo[1] == 1062) {
-        // duplicate entry, do something else
-        $emailerror = 'this user has already been added';
-    } else {
-        // an error other than duplicate entry occurred
-        echo "Exception caught: $e";
+    if (isset($_POST['btn'])) {
+        if ($e->errorInfo[1] == 1062) {
+            // duplicate entry, do something else
+            $emailerror = "Sorry a user with this email already exsist";
+        } else {
+            // an error other than duplicate entry occurred
+
+            // echo "Exception caught: $e";
+        }
     }
 }
 
@@ -92,11 +95,11 @@ try {
         <div class="form-group">
             <label for="">Email</label>
             <input type="email" class="form-control" name="email" id="" aria-describedby="helpId" placeholder="" required>
-            <small id="helpId" class="form-text text-muted"><?php
-                                                            if (isset($_POST['btn'])) {
-                                                                echo $emailerror;
-                                                            }
-                                                            ?></small>
+            <small id="helpId" class="form-text text-danger"><?php
+                                                                if (isset($_POST['btn'])) {
+                                                                    echo $emailerror;
+                                                                }
+                                                                ?></small>
         </div>
         <button type="submit" name="btn" class="w-100 btn btn-info">
             Signup

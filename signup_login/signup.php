@@ -25,8 +25,6 @@ try {
             $phone = $_POST['phone'];
 
 
-
-
             $q = $pdo->prepare("INSERT INTO users (name,email,password,gender,dob,phone) VALUES (:name, :email, :password, :gender, :dob,:phone)");
             $q->bindParam("name", $name, PDO::PARAM_STR);
             $q->bindParam("email", $email, PDO::PARAM_STR);
@@ -35,12 +33,26 @@ try {
             $q->bindParam("dob", $dob, PDO::PARAM_STR);
             $q->bindParam("phone", $phone, PDO::PARAM_STR);
             $q->execute();
+
+            // $emailerror = "User added Successfully";
+            $error = '<div style="font-size:1.5rem;" class="alert alert-success text-center" role="alert">Successfully Created Your Account</div>';
         } else {
-            echo "<script> alert('Password Not Match')</script>";
+            // echo "<script> alert('Password Not Match')</script>";
+            $error = '<div style="font-size:1.5rem;" class="alert alert-warning text-center" role="alert">Password Not Match! Please Try Again</div>';
         }
     }
 } catch (PDOException $e) {
-    echo $e->getMessage();
+    if (isset($_POST['btn'])) {
+        if ($e->errorInfo[1] == 1062) {
+            // duplicate entry, do something else
+            $error = '<div style="font-size:1.5rem;" class="alert alert-danger text-center" role="alert">Sorry, This Email already Exsist</div>';
+        } else {
+            // an error other than duplicate entry occurred
+
+            echo "Exception caught: $e";
+        }
+    }
+    // echo $e->getMessage();
 }
 
 
@@ -64,6 +76,12 @@ try {
 </head>
 
 <body>
+    <!-- Alert Bar Appear here -->
+    <small id="helpId" class="form-text text-muted"><?php
+                                                    if (isset($_POST['btn'])) {
+                                                        echo $error;
+                                                    }
+                                                    ?></small>
     <!-- form BEgins here -->
     <h1 class="text-center">
         REGISTER
@@ -82,7 +100,6 @@ try {
         <div class="form-group">
             <label for="">Email</label>
             <input type="email" class="form-control" name="email" id="" aria-describedby="helpId" placeholder="" required>
-            <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
         </div>
         <div class="from-group mb-2">
             <div>
@@ -95,14 +112,25 @@ try {
         </div>
         <div class="form-group">
             <label for="">Password</label>
-            <input type="password" class="form-control" name="password" id="" aria-describedby="helpId" placeholder="" required>
-            <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
+            <input type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="form-control" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" name="password" id="" aria-describedby="helpId" placeholder="" required>
+            <small id="helpId" class="form-text text-muted">Password Must Contains:
+                <br>
+                * Password Must Greater than 8 letters
+                <br>
+                * An Uppercase Letter
+                <br>
+                * A Lowercase Letter
+                <br>
+                * A Special Character
+                <br>
+                * A Number Digit
+            </small>
 
         </div>
 
         <div class="form-group">
             <label for="">Confirm Password</label>
-            <input type="password" class="form-control" name="confirmpassword" id="" aria-describedby="helpId" placeholder="" required>
+            <input type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="form-control" name="confirmpassword" id="" aria-describedby="helpId" placeholder="" required>
             <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
         </div>
         <div class="form-group">
